@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <style>
+   </style>
+</head>
+
+<body>
+   <div align="center">
+      <h1>Booking your place for your dinner!</h1>
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" size="30" oninput="validateName()" onblur="validateName()">
+      <div id="nameError" style="color: red;"></div><br> </br>
+
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" size="30" oninput="validatePhoneNumber()" onblur="validatePhoneNumber()">
+      <div id="phoneError" style="color: red;"></div><br> </br>
+   </div>
+   <br>
+   <div align="margin-left">
+      <h2>Select a time</h2>
+      <input type="radio" id="first" name="seating" value="5" checked>
+      <label for="first">5:00</label><br>
+      <input type="radio" id="second" name="seating" value="6">
+      <label for="second">6:00</label><br>
+      <input type="radio" id="third" name="seating" value="7">
+      <label for="third">7:00</label><br>
+      <input type="radio" id="fourth" name="seating" value="8">
+      <label for="fourth">8:00</label><br>
+      <br>
+      <h2>What would you like to have with us?</h2>
+      <input type="checkbox" id="starters" name="starters" value="Starters">
+      <label for="starters">Starters</label><br>
+      <input type="checkbox" id="Main" name="Main" value="Main Course">
+      <label for="Main">Main Course</label><br>
+      <input type="checkbox" id="dessert" name="dessert" value="Dessert">
+      <label for="dessert">Dessert</label><br>
+      <input type="checkbox" id="drinks" name="drinks" value="Drinks">
+      <label for="drinks">Drinks</label><br>
+   </div>
+   <button onclick="submit()" id="submit" disabled>
+      Submit
+   </button>
+   <div id="messageSpace">...</div>
+
+   <script>
+      function submit() {
+         var selectedTime = document.querySelector('input[name="seating"]:checked').value;
+         var selectedOptions = getSelectedOptions();
+         var name = document.getElementById('name').value;
+         var phone = document.getElementById('phone').value;
+         var messageSpace = document.getElementById('messageSpace');
+         messageSpace.innerHTML = `Reservation for: ${name} (${phone}) at ${selectedTime} starters are: ${selectedOptions}`;
+         window.alert("submit");
+      }
+
+      function validateName() {
+         var nameInput = document.getElementById('name');
+         var nameError = document.getElementById('nameError');
+         var names = nameInput.value.split(' ');
+
+         if (nameInput.value.trim() === '') {
+            nameError.innerHTML = 'Error: Name is empty.';
+            nameInput.style.backgroundColor = 'red';
+         } else if (names.length < 2) {
+            nameError.innerHTML = 'Error: First and last names are required.';
+            nameInput.style.backgroundColor = 'red';
+         } else {
+            nameError.innerHTML = '';
+            nameInput.style.backgroundColor = 'white';
+         }
+
+         updateSubmitButton();
+      }
+
+      function validatePhoneNumber() {
+         var phoneInput = document.getElementById('phone');
+         var phoneError = document.getElementById('phoneError');
+
+         if (phoneInput.value.trim() === '' || !/^\d{6}/.test(phoneInput.value) || !/^\d/.test(phoneInput.value)) {
+            phoneError.innerHTML = 'Error: Phone number must have exactly 6 characters and start with numbers.';
+            phoneInput.style.backgroundColor = 'red';
+         } else {
+            phoneError.innerHTML = '';
+            phoneInput.style.backgroundColor = 'white';
+         }
+
+         updateSubmitButton();
+      }
+
+      function updateSubmitButton() {
+         var nameInput = document.getElementById('name');
+         var phoneInput = document.getElementById('phone');
+         var submitButton = document.getElementById('submit');
+         var messageSpace = document.getElementById('messageSpace');
+
+         if (nameInput.style.backgroundColor === 'red' || phoneInput.style.backgroundColor === 'red') {
+            submitButton.disabled = true;
+            messageSpace.innerHTML = 'Fix the errors before submitting.';
+         } else {
+            submitButton.disabled = false;
+            messageSpace.innerHTML = '';
+         }
+      }
+
+      function getSelectedOptions() {
+         var selectedOptions = [];
+         var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+         checkboxes.forEach(function (checkbox) {
+            selectedOptions.push(checkbox.value);
+         });
+         return selectedOptions.join(', ');
+      }
+   </script>
+</body>
+
+</html>
